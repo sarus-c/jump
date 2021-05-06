@@ -7,10 +7,10 @@ function App() {
     <>
       <div className="container-fluid">
         <div className="row">
-          <div className="col-3 p-3 text-white bg-dark vh-100">
+          <div className="col-md-3 col-12 p-3 text-white bg-dark vh-100">
             <Sidebar />
           </div>
-          <div className="col-9 vh-100">
+          <div className="col-md-9 col-12 vh-100">
             <Section />
           </div>
         </div>

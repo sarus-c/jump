@@ -18,21 +18,20 @@ const Section = () => {
       setTimeout(() => {
         showInfo(false);
         setReload(false);
-      }, 3000);
+      }, 2000);
     }
   }, [info]);
 
   return (
-    <section>
-      {/* {info && <Info />} */}
+    <section className="position-relative d-flex flex-column h-100">
       <div className="info-panel">
         <h3>Have fun!</h3>
-        <div className={`${info ? '': 'invisible'}`}>
+        <div className={`info-holder ${info ? '': 'invisible'}`}>
           <Info />
         </div>
       </div>
       <Search handleInfo={handleInfo} />
-      <div className="overflow-auto">
+      <div className="overflow-auto flex-grow-1 mb-3">
         <List handleInfo={handleInfo} reload={reload} />
       </div>
     </section>

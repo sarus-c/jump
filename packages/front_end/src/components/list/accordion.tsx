@@ -4,13 +4,11 @@ import Item from "./item";
 
 const Accordion = ({
   list,
-  handleDeleteItem,
-  handleDeleteList,
+  handleDelete,
   handleScraping,
 }: {
   list: any;
-  handleDeleteItem: (searcg_id: string, id: string) => void;
-  handleDeleteList: (id: string) => void;
+  handleDelete: (id: string, item: string) => void;
   handleScraping: (id: string) => void;
 }) => {
   const [show, setShow] = useState("");
@@ -25,12 +23,12 @@ const Accordion = ({
               type="button"
               onClick={() => setShow(x._id)}
             >
-              {x.title}
+              {decodeURI(x.title)}
             </button>
             <button
               type="button"
               className="btn"
-              onClick={() => handleDeleteList(x._id)}
+              onClick={() => handleDelete(x._id, 'list')}
             >
               <Icon icon="trash" />
             </button>
@@ -48,7 +46,7 @@ const Accordion = ({
                     <Item
                       key={y._id}
                       info={y}
-                      handleDeleteItem={handleDeleteItem}
+                      handleDeleteItem={handleDelete}
                     />
                   ))}
                 {x.items.length < 1 && (

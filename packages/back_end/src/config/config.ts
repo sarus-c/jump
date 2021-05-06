@@ -23,7 +23,7 @@ const MONGO = {
   options: MONGO_OPTIONS,
   url:
     MONGO_USERNAME && MONGO_PASSWORD
-      ? `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}`
+      ? `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}`
       : `mongodb://${MONGO_HOST}`,
 };
 

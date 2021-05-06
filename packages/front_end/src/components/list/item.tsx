@@ -6,7 +6,7 @@ const Item = ({
   handleDeleteItem,
 }: {
   info: any;
-  handleDeleteItem: (search_id: string, id: string) => void;
+  handleDeleteItem: (id: string, item: string) => void;
 }) => (
   <div className="col-sm-4">
     <div className="card">
@@ -23,7 +23,7 @@ const Item = ({
             <button
               type="button"
               className="btn btn-warning me-2"
-              onClick={() => handleDeleteItem(info.search_id, info._id)}
+              onClick={() => handleDeleteItem(info._id, 'item')}
             >
               <Icon icon="trash" />
             </button>

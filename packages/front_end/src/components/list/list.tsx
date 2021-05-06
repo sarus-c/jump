@@ -5,15 +5,21 @@ import Spinner from "../spinner";
 import Error from "../error";
 import "./list.css";
 
-const List = ({ handleInfo, reload }: { handleInfo: () => void, reload: boolean }) => {
+const List = ({
+  handleInfo,
+  reload,
+}: {
+  handleInfo: () => void;
+  reload: boolean;
+}) => {
   const [list, setList] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const getData = () => {
-    setLoading(true);
+  const getData = (loading: boolean) => {
+    if (loading) setLoading(true);
     // GET request using fetch with error handling
-    fetch(process.env.REACT_APP_API_SEARCH || '')
+    fetch(process.env.REACT_APP_API_SEARCH || "")
       .then(async (response) => {
         const data = await response.json();
 
@@ -25,7 +31,7 @@ const List = ({ handleInfo, reload }: { handleInfo: () => void, reload: boolean 
         }
 
         setList(data);
-        setLoading(false);
+        if (loading) setLoading(false);
       })
       .catch((error) => {
         setError(true);
@@ -38,10 +44,15 @@ const List = ({ handleInfo, reload }: { handleInfo: () => void, reload: boolean 
     setError(false);
   }, []);
 
-  const handleDeleteItem = useCallback(
-    (search_id: string, id: string) => {
+  const handleDelete = useCallback(
+    (id: string, item: string) => {
+      setLoading(true);
+      const url =
+        item === "item"
+          ? process.env.REACT_APP_API_ITEMS_DELETE
+          : process.env.REACT_APP_API_SEARCH_DELETE;
       // DELETE request using fetch with error handling
-      fetch(`${process.env.REACT_APP_API_ITEMS_DELETE}/${search_id}/${id}`, {
+      fetch(`${url}/${id}`, {
         method: "DELETE",
       })
         .then(async (response) => {
@@ -55,36 +66,7 @@ const List = ({ handleInfo, reload }: { handleInfo: () => void, reload: boolean 
           }
 
           handleInfo();
-          getData();
-          console.log("Delete item", search_id, id, data);
-        })
-        .catch((error) => {
-          setError(true);
-          console.error("There was an error!", error);
-        });
-    },
-    [handleInfo]
-  );
-
-  const handleDeleteList = useCallback(
-    (id: string) => {
-      // DELETE request using fetch with error handling
-      fetch(`${process.env.REACT_APP_API_SEARCH_DELETE}/${id}`, {
-        method: "DELETE",
-      })
-        .then(async (response) => {
-          const data = await response.json();
-
-          // check for error response
-          if (!response.ok) {
-            // get error message from body or default to response status
-            const error = (data && data.message) || response.status;
-            return Promise.reject(error);
-          }
-
-          handleInfo();
-          getData();
-          console.log("Delete list", id, data);
+          console.log("Delete item", id, data);
         })
         .catch((error) => {
           setError(true);
@@ -95,29 +77,40 @@ const List = ({ handleInfo, reload }: { handleInfo: () => void, reload: boolean 
   );
 
   const handleScraping = (id: string) => {
+    setLoading(true);
     console.log("Scraping for", id);
+    setTimeout(() => {
+      handleInfo();
+      setLoading(false);
+    }, 1500);
   };
 
   useEffect(() => {
-    getData();
+    getData(true);
+  }, []);
 
-    if(reload) {
-      getData()
+  useEffect(() => {
+    if (reload) {
+      setLoading(true)
+      getData(false);
+    } else {
+      setLoading(false)
     }
   }, [reload]);
 
-  console.log(list);
-
   return (
     <>
-      {error && <Error handleError={handleError} />}
-      {loading && <Spinner />}
+      {error && !loading && <Error handleError={handleError} />}
+      {loading && !error && (
+        <div className="overlay">
+          <Spinner />
+        </div>
+      )}
       {list.count === 0 && !loading && !error && <NoItems />}
-      {list.count > 0 && !loading && !error && (
+      {list.count > 0 && !error && (
         <Accordion
           list={list}
-          handleDeleteItem={handleDeleteItem}
-          handleDeleteList={handleDeleteList}
+          handleDelete={handleDelete}
           handleScraping={handleScraping}
         />
       )}

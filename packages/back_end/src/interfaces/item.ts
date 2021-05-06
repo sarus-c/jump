@@ -5,5 +5,5 @@ export default interface IItem extends Document {
     price: string;
     url: string;
     img: string;
-    search: ObjectId;
+    search_id: string;
 }

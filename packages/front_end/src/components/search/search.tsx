@@ -42,7 +42,7 @@ const Search = ({ handleInfo }: { handleInfo: () => void }) => {
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, url }),
+        body: JSON.stringify({ title: encodeURI(title), url: encodeURI(url) }),
       };
       fetch(process.env.REACT_APP_API_SEARCH_CREATE || '', requestOptions)
         .then(async (response) => {
