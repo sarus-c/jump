@@ -1,0 +1,23 @@
+{
+  "name": "jump-service",
+  "version": "1.0.0",
+  "description": "Just jump.BE with Node",
+  "main": "index.js",
+  "scripts": {
+    "start": "python index.py",
+    "install": "pip install requests beautifulsoup4 lxml"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sarus-c/jump.git"
+  },
+  "keywords": [
+    "jump"
+  ],
+  "author": "Silviu Antohi",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/sarus-c/jump/issues"
+  },
+  "homepage": "https://github.com/sarus-c/jump#readme"
+}

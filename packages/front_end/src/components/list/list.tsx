@@ -46,7 +46,6 @@ const List = ({
 
   const handleDelete = useCallback(
     (id: string, item: string) => {
-      setLoading(true);
       const url =
         item === "item"
           ? process.env.REACT_APP_API_ITEMS_DELETE
@@ -66,7 +65,6 @@ const List = ({
           }
 
           handleInfo();
-          console.log("Delete item", id, data);
         })
         .catch((error) => {
           setError(true);
@@ -78,11 +76,28 @@ const List = ({
 
   const handleScraping = (id: string) => {
     setLoading(true);
-    console.log("Scraping for", id);
-    setTimeout(() => {
-      handleInfo();
-      setLoading(false);
-    }, 1500);
+
+    fetch(`${process.env.REACT_APP_API_SCRAP}/${id}`, {
+      method: "GET"
+    })
+      .then(async (response) => {
+        console.log(response)
+        const data = await response.json();
+
+        // check for error response
+        if (!response.ok) {
+          // get error message from body or default to response status
+          const error = (data && data.message) || response.status;
+          return Promise.reject(error);
+        }
+
+        handleInfo();
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(true);
+        console.error("There was an error!", error);
+      });
   };
 
   useEffect(() => {
