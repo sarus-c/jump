@@ -1,11 +1,11 @@
+import os
 import json
-from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 import requests
 import scraper
 
-config = dotenv_values(".env")
+load_dotenv()
 
 
 class RequestHandler(BaseHTTPRequestHandler):
@@ -26,7 +26,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         p_length = len(p)
 
         if p_length == 2 and p[0] == 'task':
-            resp = requests.get(config['API_SEARCH'] + '/' + p[1])
+            resp = requests.get(os.getenv('API_SEARCH') + '/' + p[1])
 
             if resp.status_code != 200 or not resp.json()['searche']:
                 self.send_error(resp.status_code)
@@ -35,7 +35,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 search = search['searche']
                 url = search['url']
                 x = scraper.scrap(url)
-                load = requests.post(config['API_ITEMS'] + '/' + p[1], json=x)
+                load = requests.post(os.getenv('API_ITEMS') + '/' + p[1], json=x)
 
                 if load.status_code in {200, 201}:
                     self._set_headers()
@@ -47,9 +47,10 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 
 def main():
-    port = int(config['PORT'])
-    host_name = config['HOST_NAME']
-    server_address = ('localhost', port)
+    port = int(os.getenv('SERVER_PORT'))
+    host_name = os.getenv('HOST_NAME')
+    url = os.getenv('SERVER_URL')
+    server_address = (url, port)
     server = HTTPServer(server_address, RequestHandler)
 
     print("Server started http://%s:%s" % (host_name, port))

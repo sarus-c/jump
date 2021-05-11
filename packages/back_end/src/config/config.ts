@@ -12,19 +12,16 @@ const MONGO_OPTIONS = {
   retryWrites: false,
 };
 
-const MONGO_USERNAME = process.env.MONGO_USERNAME || "";
-const MONGO_PASSWORD = process.env.MONGO_PASSWORD || "";
-const MONGO_HOST = process.env.MONGO_URL;
+const MONGO_USERNAME = process.env.MONGO_USERNAME || "jumpuser";
+const MONGO_PASSWORD = process.env.MONGO_PASSWORD || "jump123";
+const MONGO_HOST = process.env.MONGO_HOST || "localhost:28017/jump?authSource=jump";
 
 const MONGO = {
   host: MONGO_HOST,
   password: MONGO_PASSWORD,
   username: MONGO_USERNAME,
   options: MONGO_OPTIONS,
-  url:
-    MONGO_USERNAME && MONGO_PASSWORD
-      ? `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}`
-      : `mongodb://${MONGO_HOST}`,
+  url: `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}`
 };
 
 const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || "localhost";

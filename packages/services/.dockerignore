@@ -1,0 +1,9 @@
+node_modules
+Dockerfile
+.env
+.git
+.gitignore
+.dockerignore
+.idea
+.vscode
+__pycache__

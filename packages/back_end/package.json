@@ -4,9 +4,9 @@
   "description": "Just jump.BE with Node",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "npm run build && node dist/index.js",
     "start:dev": "nodemon src/index.ts",
-    "build": "rm -rf build/ && tsc"
+    "build": "rm -rf dist/ && tsc"
   },
   "repository": {
     "type": "git",

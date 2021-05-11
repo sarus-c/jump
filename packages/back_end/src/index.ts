@@ -12,6 +12,7 @@ const { url, options } = config.mongo;
 const NAMESPACE = "SERVER";
 
 /** Connect to MongoDb */
+console.log('----------', url, options);
 mongoose
   .connect(url, options)
   .then((result) => {

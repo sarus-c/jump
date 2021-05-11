@@ -1,0 +1,59 @@
+version: '3.8'
+services:
+    mongodb:
+        image: mongo:4.4-bionic
+        # extra_hosts:
+        #     - "localhost:192.168.65.2"
+        ports: 
+            - 28017:27017
+        volumes:
+            - mongodb--vol:/data/db
+            - ./packages/db/mongo-init/:/docker-entrypoint-initdb.d/:ro
+
+    services:
+        build: ./packages/services
+        image: services:latest
+        extra_hosts:
+            - "localhost:192.168.65.2"
+        ports:
+            - 5001:5001
+        environment: 
+            - SERVER_PORT=5001
+            - HOST_NAME=localhost
+            - SERVER_URL=0.0.0.0
+            - API_SEARCH=http://localhost:5000/api/search/one
+            - API_ITEMS=http://localhost:5000/api/items/create
+
+    back_end:
+        build: ./packages/back_end
+        image: back_end:latest
+        extra_hosts:
+            - "localhost:192.168.65.2"
+        depends_on: ["mongodb"]
+        ports: 
+            - 5000:5000
+        environment: 
+            - SERVER_PORT=5000
+            - SERVER_HOSTNAME=localhost
+            - MONGO_USERNAME=jumpuser
+            - MONGO_PASSWORD=jump123
+            - MONGO_HOST=mongodb:27017/jump
+            #172.30.0.4
+
+    front_end:
+        build: ./packages/front_end
+        image: front_end:latest
+        extra_hosts:
+            - "localhost:192.168.65.2"
+        ports: 
+            - 3000:80
+        environment: 
+            - REACT_APP_API_SEARCH=http://localhost:5000/api/search
+            - REACT_APP_API_SEARCH_CREATE=http://localhost:5000/api/search/create
+            - REACT_APP_API_SEARCH_DELETE=http://localhost:5000/api/search/delete
+            - REACT_APP_API_ITEMS_DELETE=http://localhost:5000/api/items/delete
+            - REACT_APP_API_SCRAP=http://localhost:5001/task
+# in-service volumes are very slow in MacOS and Windows, 
+# so using fast shared volumes for large storage
+volumes:
+    mongodb--vol:
