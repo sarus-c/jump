@@ -19,7 +19,6 @@ services:
             - 5001:5001
         environment: 
             - SERVER_PORT=5001
-            - HOST_NAME=localhost
             - SERVER_URL=0.0.0.0
             - API_SEARCH=http://localhost:5000/api/search/one
             - API_ITEMS=http://localhost:5000/api/items/create

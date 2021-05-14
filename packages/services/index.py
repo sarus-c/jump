@@ -1,67 +1,54 @@
 import os
-import json
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from flask import Flask
+from flask_restful import Resource, Api
 from dotenv import load_dotenv
 import requests
 import scraper
 
 load_dotenv()
 
+app = Flask(__name__)
+api = Api(app)
 
-class RequestHandler(BaseHTTPRequestHandler):
-    def _set_headers(self):
-        self.send_response(200)
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Headers",
-                         "Origin, X-Requested-With, Content-Type, Accept, Authorization")
-        self.send_header('Content-type', 'application/json; charset=utf-8')
-        self.end_headers()
 
-    def do_HEAD(self):
-        self._set_headers()
+class Task(Resource):
+    def get(self, title_id):
+        url = self.get_info(title_id)
+        rs = 'Error'
 
-    def do_GET(self):
-        p = self.path.split('/')
-        p = list(filter(str.strip, p))
-        p_length = len(p)
+        if url:
+            try:
+                data = scraper.scrap(url)
+                load = requests.post(os.getenv('API_ITEMS') + '/' + title_id, json=data)
+                if load.status_code in {200, 201}:
+                    rs = 'Operation done!'
+            except ValueError:
+                rs = 'Error'
 
-        if p_length == 2 and p[0] == 'task':
-            resp = requests.get(os.getenv('API_SEARCH') + '/' + p[1])
+        return {'result': rs}, {'Access-Control-Allow-Origin': '*'}
 
+    @staticmethod
+    def get_info(title_id):
+        try:
+            resp = requests.get(os.getenv('API_SEARCH') + '/' + title_id)
             if resp.status_code != 200 or not resp.json()['searche']:
-                self.send_error(resp.status_code)
+                return False
             else:
                 search = resp.json()
                 search = search['searche']
-                url = search['url']
-                x = scraper.scrap(url)
-                load = requests.post(os.getenv('API_ITEMS') + '/' + p[1], json=x)
+                return search['url']
+        except ValueError:
+            return False
 
-                if load.status_code in {200, 201}:
-                    self._set_headers()
-                    self.wfile.write(json.dumps({'msg': 'Items added', 'received': 'ok'}).encode())
-                else:
-                    self.send_error(load.status_code)
-        else:
-            self.send_error(404)
+
+api.add_resource(Task, '/task/<string:title_id>')
 
 
 def main():
     port = int(os.getenv('SERVER_PORT'))
-    host_name = os.getenv('HOST_NAME')
     url = os.getenv('SERVER_URL')
-    server_address = (url, port)
-    server = HTTPServer(server_address, RequestHandler)
 
-    print("Server started http://%s:%s" % (host_name, port))
-
-    try:
-        server.serve_forever()
-    except KeyboardInterrupt:
-        pass
-
-    server.server_close()
-    print("Server stopped.")
+    app.run(host=url, port=port, debug=True)
 
 
 if __name__ == '__main__':
