@@ -37,7 +37,6 @@ services:
             - MONGO_USERNAME=jumpuser
             - MONGO_PASSWORD=jump123
             - MONGO_HOST=mongodb:27017/jump
-            #172.30.0.4
 
     front_end:
         build: ./packages/front_end

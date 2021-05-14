@@ -3,7 +3,7 @@ import Icon from "../icon";
 import "./sidebar.css";
 
 const Sidebar = () => (
-  <aside className="d-flex flex-column">
+  <aside className="d-flex flex-column" data-testid="sidebar">
     <a
       href="/"
       className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
