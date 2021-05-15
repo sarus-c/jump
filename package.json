@@ -4,9 +4,12 @@
   "description": "Just jump",
   "main": "index.js",
   "scripts": {
-    "install": "(cd packages) & (cd back_end && npm install) & (cd ../front_end && npm install) & (cd ../services && pip install -r requirements.txt)",
+    "install:fe": "(cd packages/front_end && npm install)",
+    "install:be": "(cd packages/back_end && npm install)",
+    "install:se": "(cd packages/services && pip install -r requirements.txt)",
     "test": "(cd packages) & (cd front_end && npm run test)",
-    "build": "(cd packages) & (cd back_end && npm run build) & (cd ../front_end && npm run build)"
+    "build:fe": "(cd packages/front_end && npm run build)",
+    "build:be": "(cd packages/back_end && npm run build)"
   },
   "repository": {
     "type": "git",
