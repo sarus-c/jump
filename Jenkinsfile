@@ -37,7 +37,7 @@ pipeline {
       }
     }
     stage("install services") {
-      agent { docker { image 'python' } }
+      agent { docker { image 'python:3-alpine' } }
       steps {
           sh 'cd packages/services && pip install -r requirements.txt'
       }
