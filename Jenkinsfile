@@ -16,7 +16,7 @@ pipeline {
       }
     }
     stage("install services") {
-      agent { docker { image 'python:3.9' } }
+      agent { docker { image 'python' } }
       steps {
           sh 'cd packages/services && pip install -r requirements.txt'
       }
