@@ -7,7 +7,7 @@
     "install:fe": "(cd packages/front_end && npm install)",
     "install:be": "(cd packages/back_end && npm install)",
     "install:se": "(cd packages/services && pip install -r requirements.txt)",
-    "test": "(cd packages) & (cd front_end && npm run test)",
+    "test:fe": "(cd packages/front_end && npm run test)",
     "build:fe": "(cd packages/front_end && npm run build)",
     "build:be": "(cd packages/back_end && npm run build)"
   },
