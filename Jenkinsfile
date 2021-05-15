@@ -16,10 +16,9 @@ pipeline {
       }
     }
     stage("install services") {
+      agent { docker { image 'python:3.9' } }
       steps {
-        nodejs("Node-14.16.1") {
-          sh 'npm run install:se'
-        }
+          sh 'cd packages/services && pip install -r requirements.txt'
       }
     }
     stage("test front_end") {
