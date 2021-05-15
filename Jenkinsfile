@@ -15,12 +15,6 @@ pipeline {
         }
       }
     }
-    stage("install services") {
-      agent { docker { image 'python' } }
-      steps {
-          sh 'cd packages/services && pip install -r requirements.txt'
-      }
-    }
     stage("test front_end") {
       steps{
         nodejs("Node-14.16.1") {
@@ -40,6 +34,12 @@ pipeline {
         nodejs("Node-14.16.1") {
           sh 'npm run build:be'
         }
+      }
+    }
+    stage("install services") {
+      agent { docker { image 'python' } }
+      steps {
+          sh 'cd packages/services && pip install -r requirements.txt'
       }
     }
   }
