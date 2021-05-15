@@ -18,7 +18,7 @@ pipeline {
     }
     stage("test front_end") {
       nodejs("14.16.1") {
-        sh 'npm run test'
+        sh 'npm run test:fe'
       }
     }
     stage("build front_end") {
