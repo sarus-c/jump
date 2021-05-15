@@ -1,10 +1,6 @@
 pipeline {
   agent none
   stages {
-    stage('Initialize'){
-        def dockerHome = tool 'DockerJump'
-        env.PATH = "${dockerHome}/bin:${env.PATH}"
-    }
     stage("install front_end") {
       agent any
       steps {
