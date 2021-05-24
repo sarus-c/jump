@@ -2,14 +2,8 @@
   "name": "jump",
   "version": "1.0.0",
   "description": "Just jump",
-  "main": "index.js",
   "scripts": {
-    "install:fe": "(cd packages/front_end && npm install)",
-    "install:be": "(cd packages/back_end && npm install)",
-    "install:se": "(cd packages/services && pip install -r requirements.txt)",
-    "test:fe": "(cd packages/front_end && npm run test)",
-    "build:fe": "(cd packages/front_end && npm run build)",
-    "build:be": "(cd packages/back_end && npm run build)"
+    "start": "bash ./dockerup.sh"
   },
   "repository": {
     "type": "git",

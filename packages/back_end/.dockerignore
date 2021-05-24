@@ -1,7 +1,0 @@
-node_modules
-Dockerfile
-.env
-.git
-.gitignore
-.dockerignore
-.vscode

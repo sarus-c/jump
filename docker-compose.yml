@@ -2,17 +2,16 @@ version: '3.8'
 services:
     mongodb:
         image: mongo:4.4-bionic
-        # extra_hosts:
-        #     - "localhost:192.168.65.2"
+        container_name: jump-DB
         ports: 
-            - 28017:27017
+            - 27017:27017
         volumes:
             - mongodb--vol:/data/db
-            - ./packages/db/mongo-init/:/docker-entrypoint-initdb.d/:ro
+            - ./db/mongo-init/:/docker-entrypoint-initdb.d/:ro
 
     services:
-        build: ./packages/services
-        image: services:latest
+        image: santohi/jumpse:latest
+        container_name: jump-SE
         extra_hosts:
             - "localhost:192.168.65.2"
         ports:
@@ -20,12 +19,11 @@ services:
         environment: 
             - SERVER_PORT=5001
             - SERVER_URL=0.0.0.0
-            - API_SEARCH=http://localhost:5000/api/search/one
             - API_ITEMS=http://localhost:5000/api/items/create
 
     back_end:
-        build: ./packages/back_end
-        image: back_end:latest
+        image: santohi/jumpbe:latest
+        container_name: jump-BE
         extra_hosts:
             - "localhost:192.168.65.2"
         depends_on: ["mongodb"]
@@ -34,13 +32,13 @@ services:
         environment: 
             - SERVER_PORT=5000
             - SERVER_HOSTNAME=localhost
-            - MONGO_USERNAME=jumpuser
-            - MONGO_PASSWORD=jump123
-            - MONGO_HOST=mongodb:27017/jump
+            - MONGO_USERNAME=silviu
+            - MONGO_PASSWORD=ASD123asd>
+            - MONGO_HOST=sarus.uvxdn.mongodb.net/sarus?retryWrites=true&w=majority
 
     front_end:
-        build: ./packages/front_end
-        image: front_end:latest
+        image: santohi/jumpfe:latest
+        container_name: jump-FE
         extra_hosts:
             - "localhost:192.168.65.2"
         ports: 
