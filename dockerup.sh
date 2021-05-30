@@ -9,6 +9,8 @@ function main {
 
   echo "Found Front End image"
 
+  echo "Found Jenkins image"
+
   # Pull the latest docker images
   docker-compose pull
   docker-compose up -d
