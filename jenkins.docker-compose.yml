@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+    jenkins:
+        image: jenkins/jenkins:lts-jdk11
+        container_name: jenkins
+        ports: 
+            - 8080:8080
+        volumes:
+            - jenkins_home:/var/jenkins_home
+
+# in-service volumes are very slow in MacOS and Windows, 
+# so using fast shared volumes for large storage
+volumes:
+    jenkins_home:
