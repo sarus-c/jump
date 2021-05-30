@@ -49,7 +49,16 @@ services:
             - REACT_APP_API_SEARCH_DELETE=http://localhost:5000/api/search/delete
             - REACT_APP_API_ITEMS_DELETE=http://localhost:5000/api/items/delete
             - REACT_APP_API_SCRAP=http://localhost:5001/task
+
+    jenkins:
+        image: jenkins/jenkins:lts-jdk11
+        container_name: jenkins
+        ports: 
+            - 8080:8080
+        volumes:
+            - jenkins_home:/var/jenkins_home
 # in-service volumes are very slow in MacOS and Windows, 
 # so using fast shared volumes for large storage
 volumes:
     mongodb--vol:
+    jenkins_home:
